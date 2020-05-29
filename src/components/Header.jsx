@@ -3,7 +3,7 @@ import logo from "../assets/logo.png";
 
 const Header = () => {
   return (
-    <div className="col-md-12 text-center">
+    <div className="col-md-12 text-center mt-4">
       <img src={logo} alt="" />
       <h3 className="mt-2 brand-title">Books Management Solution </h3>
     </div>

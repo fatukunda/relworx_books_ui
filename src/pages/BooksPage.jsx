@@ -1,7 +1,12 @@
 import React from "react";
+import NavBar from "../components/NavBar";
 
 const BooksPage = () => {
-    return <div>Books Page</div>
-}
+  return (
+    <div>
+      <NavBar />
+    </div>
+  );
+};
 
 export default BooksPage;

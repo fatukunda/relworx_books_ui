@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as actions from "../constants/userConstants";
+import { history } from "../../App";
 
 const baseUrl = "https://relworxbooks.herokuapp.com/api/v1/users";
 
@@ -53,22 +54,23 @@ const createUserPending = (isLoading) => {
 
 export const login = (userDetails) => async (dispatch) => {
   dispatch(userLoginPending(true));
-  axios
-    .post(`${baseUrl}/login`, userDetails)
-    .then((response) => {
-      const { user } = response.data;
-      dispatch(userLoginSuccess(user));
+  try {
+    const response = await axios.post(`${baseUrl}/login`, userDetails);
+    const {
+      data: { user, token },
+    } = response.data;
+    dispatch(userLoginSuccess({ user, token }));
+    dispatch(userLoginPending(false));
+    localStorage.setItem("isLoggedIn", true);
+    localStorage.setItem("auth_token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    history.push("/books");
+  } catch (error) {
+    if (error.response) {
       dispatch(userLoginPending(false));
-      localStorage.setItem("isLoggedIn", true);
-      localStorage.setItem("auth_token", user.token);
-      localStorage.setItem("user", JSON.stringify(user));
-    })
-    .catch((error) => {
-      if (error.response) {
-        dispatch(userLoginPending(false));
-        dispatch(userLoginFailure({ message: error.response.data.message }));
-      }
-    });
+      dispatch(userLoginFailure({ message: error.response.data.message }));
+    }
+  }
 };
 
 export const logout = () => (dispatch) => {
@@ -78,19 +80,24 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem("user");
 };
 
-export const createUser = (userInfo) => (dispatch) => {
+export const createUser = (userInfo) => async (dispatch) => {
   dispatch(createUserPending(true));
-  axios
-    .post(baseUrl, userInfo)
-    .then((response) => {
-      const { user } = response.data;
-      dispatch(createUserSuccess(user));
+  try {
+    const response = await axios.post(baseUrl, userInfo);
+    const {
+      data: { user, token },
+    } = response.data;
+    console.log(user);
+    dispatch(createUserSuccess({ user, token }));
+    dispatch(createUserPending(false));
+    localStorage.setItem("isLoggedIn", true);
+    localStorage.setItem("auth_token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    history.push("/books");
+  } catch (error) {
+    if (error.response) {
+      dispatch(createUserFailure(error.response.data.message));
       dispatch(createUserPending(false));
-    })
-    .catch((error) => {
-      if (error.response) {
-        dispatch(createUserFailure(error.response.data.message));
-        dispatch(createUserPending(false));
-      }
-    });
+    }
+  }
 };

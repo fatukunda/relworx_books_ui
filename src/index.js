@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import "./styles/custom.scss";
 import "./fonts/Poppins-Regular.ttf";
+import "bootstrap/dist/js/bootstrap";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
