@@ -1,6 +1,5 @@
 import axios from "axios";
 import * as actions from "../constants/userConstants";
-import { history } from "../../App";
 
 const baseUrl = "https://relworxbooks.herokuapp.com/api/v1/users";
 
@@ -64,7 +63,7 @@ export const login = (userDetails) => async (dispatch) => {
     localStorage.setItem("isLoggedIn", true);
     localStorage.setItem("auth_token", token);
     localStorage.setItem("user", JSON.stringify(user));
-    history.push("/books");
+    window.location.href = "/books";
   } catch (error) {
     if (error.response) {
       dispatch(userLoginPending(false));
@@ -78,6 +77,7 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("auth_token");
   localStorage.removeItem("user");
+  window.location.href = "/";
 };
 
 export const createUser = (userInfo) => async (dispatch) => {
@@ -93,7 +93,7 @@ export const createUser = (userInfo) => async (dispatch) => {
     localStorage.setItem("isLoggedIn", true);
     localStorage.setItem("auth_token", token);
     localStorage.setItem("user", JSON.stringify(user));
-    history.push("/books");
+    window.location.href = "/books";
   } catch (error) {
     if (error.response) {
       dispatch(createUserFailure(error.response.data.message));

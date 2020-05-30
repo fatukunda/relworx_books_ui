@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header";
 import LoginForm from "../components/RegistrationForm";
+import { history } from "../App";
 
 const UserRegistrationPage = () => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push("/books");
+    }
+  });
   return (
     <>
       <div className="row logo-title">

@@ -115,8 +115,15 @@ export const registerBook = (bookDetails) => async (dispatch) => {
     const book = response.data;
     dispatch(createBookSuccess(book));
     dispatch(createBookPending(false));
+    dispatch(viewUserBooks());
   } catch (error) {
     if (error.response) {
+      if (error.response.status === 401) {
+        dispatch(createBookFailure(error.response.data));
+        localStorage.clear();
+        window.location.href = "/";
+      }
+      console.log(error.response.status);
       dispatch(createBookFailure(error.response.data));
       dispatch(createBookPending(false));
     }
@@ -142,11 +149,16 @@ export const viewUserBooks = () => async (dispatch) => {
   dispatch(fetchBooksPending(true));
   try {
     const response = await axios.get(baseUrl);
-    const books = response.data;
-    dispatch(fetchBooksSuccess(books));
+    const {data: { books }} = response.data;
+    dispatch(fetchBooksSuccess(books.reverse()));
     dispatch(fetchBooksPending(false));
   } catch (error) {
     if (error.response) {
+      if (error.response.status === 401) {
+        dispatch(fetchBooksFailure(error.response.data));
+        localStorage.clear();
+        window.location.href = "/";
+      }
       dispatch(fetchBooksFailure(error.response.data));
       dispatch(fetchBooksPending(false));
     }

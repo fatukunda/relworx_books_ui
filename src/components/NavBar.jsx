@@ -1,10 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDispatch, useSelector } from "react-redux";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/logo.png";
+import { logout } from "../store/actions/userActions";
 
 const NavBar = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.userReducer.user.user);
+  const handleLogout = () => {
+    dispatch(logout());
+  };
   return (
-    <nav className="navbar navbar-expand-lg navbar-light dash-navbar">
+    <nav className="navbar fixed-top navbar-expand-lg navbar-light dash-navbar">
       <Link to="/books" className="navbar-brand">
         <img src={logo} className="d-inline-block align-top" alt="logo" />
       </Link>
@@ -28,8 +37,13 @@ const NavBar = () => {
             </Link>
           </li>
         </ul>
-        <span className="navbar-text mr-4 logged-in-user">Frank Atukunda</span>
-        <button className="btn btn-outline-info my-2 my-sm-0" type="submit">
+        <FontAwesomeIcon icon={faUser} color="#1d3b6c" className="mr-2" />
+        <span className="navbar-text mr-4 logged-in-user">{`${user.firstName} ${user.lastName}`}</span>
+        <button
+          className="btn btn-outline-info my-2 my-sm-0"
+          type="submit"
+          onClick={handleLogout}
+        >
           Logout
         </button>
       </div>
