@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as actions from "../constants/bookConstants";
+import { history } from "../../App";
 
 const baseUrl = "https://relworxbooks.herokuapp.com/api/v1/books";
 
@@ -115,6 +116,7 @@ export const registerBook = (bookDetails) => async (dispatch) => {
     const book = response.data;
     dispatch(createBookSuccess(book));
     dispatch(createBookPending(false));
+    history.push("/books");
     dispatch(viewUserBooks());
   } catch (error) {
     if (error.response) {
@@ -149,7 +151,9 @@ export const viewUserBooks = () => async (dispatch) => {
   dispatch(fetchBooksPending(true));
   try {
     const response = await axios.get(baseUrl);
-    const {data: { books }} = response.data;
+    const {
+      data: { books },
+    } = response.data;
     dispatch(fetchBooksSuccess(books.reverse()));
     dispatch(fetchBooksPending(false));
   } catch (error) {
@@ -169,12 +173,17 @@ export const editBook = (bookData, id, imageData) => async (dispatch) => {
   dispatch(editBookPending(true));
   try {
     if (imageData) {
-      const response = await axios.put(`${baseUrl}/${id}/image-upload`, imageData);
+      const response = await axios.put(
+        `${baseUrl}/${id}/image-upload`,
+        imageData
+      );
       const { data } = response;
-      console.log(data)
+      console.log(data);
     }
     const response = await axios.patch(`${baseUrl}/${id}`, bookData);
-    const {data: { book }} = response.data;
+    const {
+      data: { book },
+    } = response.data;
     dispatch(editBookSuccess(book));
     dispatch(editBookPending(false));
     dispatch(viewUserBooks());
@@ -193,6 +202,7 @@ export const deleteBook = (bookId) => async (dispatch) => {
     const book = response.data;
     dispatch(deleteBookSuccess(book));
     dispatch(deleteBookPending(false));
+    dispatch(viewUserBooks());
   } catch (error) {
     if (error.response) {
       dispatch(deleteBookFailure(error.response.data));

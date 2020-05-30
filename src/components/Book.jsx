@@ -1,14 +1,22 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import BookEditForm from "./BookEditForm";
 import NoBookCover from "./NoBookCover";
 import AppModal from "./AppModal";
+import Loader from "./Loader";
+import { deleteBook } from "../store/actions/bookActions";
 
 const Book = ({ book }) => {
   const [editFormVisible, setEditFormVisible] = useState(false);
+  const deleteLoading = useSelector((state) => state.bookReducer.deleteLoading);
+  const dispatch = useDispatch();
   const editHandler = () => {
     setEditFormVisible(true);
+  };
+  const deleteHandler = () => {
+    dispatch(deleteBook(book._id));
   };
   const hideEditModal = () => {
     setEditFormVisible(false);
@@ -44,9 +52,18 @@ const Book = ({ book }) => {
               <button
                 className="btn btn-sm btn-danger"
                 style={{ width: "5rem" }}
+                onClick={deleteHandler}
               >
-                <FontAwesomeIcon icon={faTrash} className="mr-2" />
-                Delete
+                {deleteLoading ? (
+                  <Loader
+                    styles="d-flex justify-content-center"
+                    spinnerColor="text-warning"
+                  />
+                ) : (
+                  <span>
+                    <FontAwesomeIcon icon={faTrash} className="mr-2" /> Delete
+                  </span>
+                )}
               </button>
             </div>
           </div>

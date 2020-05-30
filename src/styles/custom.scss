@@ -57,8 +57,8 @@ $body-bg: #d9eef9;
 .flip-card {
   background-color: transparent;
   height: 320px;
-  // border: 1px solid #f1f1f1;
-  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  border: 1px solid #fff;
+  perspective: 1000px; 
 }
 
 /* This container is needed to position the front and back side */
@@ -84,11 +84,6 @@ $body-bg: #d9eef9;
   height: 100%;
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden;
-}
-
-/* Style the front side (fallback if image is missing) */
-.flip-card-front {
-  // background-color: #bbb;
 }
 
 /* Style the back side */

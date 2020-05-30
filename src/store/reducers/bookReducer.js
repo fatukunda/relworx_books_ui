@@ -3,6 +3,9 @@ import * as actions from "../constants/bookConstants";
 const initialState = {
   books: [],
   book: {},
+  createLoading: false,
+  editLoading: false,
+  deleteLoading: false,
   isLoading: false,
   error: null,
 };
@@ -17,7 +20,7 @@ const bookReducer = (state = initialState, action) => {
     case actions.CREATE_BOOK_PENDING:
       return {
         ...state,
-        isLoading: action.payload,
+        createLoading: action.payload,
       };
     case actions.CREATE_BOOK_FAILURE:
       return {
@@ -47,7 +50,7 @@ const bookReducer = (state = initialState, action) => {
     case actions.EDIT_BOOK_PENDING:
       return {
         ...state,
-        isLoading: action.payload,
+        editLoading: action.payload,
       };
     case actions.EDIT_BOOK_FAILURE:
       return {
@@ -62,7 +65,7 @@ const bookReducer = (state = initialState, action) => {
     case actions.DELETE_BOOK_PENDING:
       return {
         ...state,
-        isLoading: action.payload,
+        deleteLoading: action.payload,
       };
     case actions.DELETE_BOOK_FAILURE:
       return {

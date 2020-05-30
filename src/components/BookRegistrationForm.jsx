@@ -9,7 +9,7 @@ import { registerBook } from "../store/actions/bookActions";
 
 const BookRegistrationForm = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.bookReducer.isLoading);
+  const createLoading = useSelector((state) => state.bookReducer.createLoading);
   const error = useSelector((state) => state.bookReducer.error);
   const [image, setImage] = useState("");
   const [fields, handleFieldChange] = useForm({
@@ -60,14 +60,14 @@ const BookRegistrationForm = () => {
         withIcon={true}
         buttonText="Upload book photo"
         onChange={handleImageUpload}
-        imgExtension={[".jpg", ".gif", ".png"]}
+        imgExtension={[".jpg", ".gif", ".png", "jpeg"]}
         maxFileSize={5242880}
         name="image"
         singleImage={true}
       />
       {error ? <Alert alertype="alert-danger" message={error.message} /> : null}
       <button type="submit" className="btn btn-info btn-block mb-4 form-btn">
-        {isLoading ? (
+        {createLoading ? (
           <div className="spinner-border spinner-border-sm" role="status">
             <span className="sr-only">Loading...</span>
           </div>

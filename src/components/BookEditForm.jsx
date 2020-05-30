@@ -9,7 +9,7 @@ import { editBook } from "../store/actions/bookActions";
 
 const BookEditForm = ({ book }) => {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.bookReducer.isLoading);
+  const editLoading = useSelector((state) => state.bookReducer.editLoading);
   const error = useSelector((state) => state.bookReducer.error);
   const [image, setImage] = useState("");
   const [fields, handleFieldChange] = useForm({
@@ -71,7 +71,7 @@ const BookEditForm = ({ book }) => {
       />
       {error ? <Alert alertype="alert-danger" message={error.message} /> : null}
       <button type="submit" className="btn btn-info btn-block mb-4 form-btn">
-        {isLoading ? (
+        {editLoading ? (
           <div className="spinner-border spinner-border-sm" role="status">
             <span className="sr-only">Loading...</span>
           </div>
