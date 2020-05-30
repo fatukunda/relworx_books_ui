@@ -165,13 +165,19 @@ export const viewUserBooks = () => async (dispatch) => {
   }
 };
 
-export const editBook = (bookId) => async (dispatch) => {
+export const editBook = (bookData, id, imageData) => async (dispatch) => {
   dispatch(editBookPending(true));
   try {
-    const response = await axios.patch(`${baseUrl}/${bookId}`);
-    const book = response.data;
+    if (imageData) {
+      const response = await axios.put(`${baseUrl}/${id}/image-upload`, imageData);
+      const { data } = response;
+      console.log(data)
+    }
+    const response = await axios.patch(`${baseUrl}/${id}`, bookData);
+    const {data: { book }} = response.data;
     dispatch(editBookSuccess(book));
     dispatch(editBookPending(false));
+    dispatch(viewUserBooks());
   } catch (error) {
     if (error.response) {
       dispatch(editBookFailure(error.response.data));
