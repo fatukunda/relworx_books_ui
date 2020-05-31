@@ -5,6 +5,7 @@ import axios from "axios";
 import LoginPage from "./pages/LoginPage";
 import UserRegistrationPage from "./pages/UserRegistrationPage";
 import BooksPage from "./pages/BooksPage";
+import Footer from "./components/Footer";
 import store from "./store";
 import { userLoginSuccess } from "./store/actions/userActions";
 export const history = createBrowserHistory();
@@ -28,6 +29,7 @@ const App = () => {
         <Route exact path="/" component={LoginPage} />
         <Route exact path="/register" component={UserRegistrationPage} />
       </div>
+      <Footer />
     </Router>
   );
 };
