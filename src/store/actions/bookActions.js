@@ -183,18 +183,29 @@ export const viewUserBooks = (url) => async (dispatch) => {
   }
 };
 
-export const editBook = (bookData, id, imageData) => async (dispatch) => {
-  dispatch(editBookPending(true));
-  try {
-    if (imageData.image) {
-      const response = await axios.put(
+export const updateImage = (imageData, id) => async dispatch => {
+   dispatch(editBookPending(true));
+   try {
+     const response = await axios.put(
         `${baseUrl}/${id}/image-upload`,
         imageData
       );
       const { data } = response;
-      console.log(data);
-      return;
-    }
+      dispatch(editBookSuccess(data));
+      dispatch(editBookPending(false));
+      dispatch(viewUserBooks("/api/v1/books"));
+      console.log(data)
+   } catch (error) {
+     if (error.response) {
+       dispatch(editBookFailure(error.response.data));
+       dispatch(editBookPending(false));
+     }
+   }
+}
+
+export const editBook = (bookData, id) => async (dispatch) => {
+  dispatch(editBookPending(true));
+  try {
     const response = await axios.patch(`${baseUrl}/${id}`, bookData);
     const {
       data: { book },

@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as actions from "../constants/userConstants";
+// import { history } from "../../App";
 
 const baseUrl = "https://relworxbooks.herokuapp.com/api/v1/users";
 
@@ -87,7 +88,6 @@ export const createUser = (userInfo) => async (dispatch) => {
     const {
       data: { user, token },
     } = response.data;
-    console.log(user);
     dispatch(createUserSuccess({ user, token }));
     dispatch(createUserPending(false));
     localStorage.setItem("isLoggedIn", true);

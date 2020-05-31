@@ -5,7 +5,7 @@ import ImageUploader from "react-images-upload";
 import Input from "./Input";
 import Alert from "./Alert";
 import { useForm } from "../libs/hooks";
-import { editBook } from "../store/actions/bookActions";
+import { editBook, updateImage } from "../store/actions/bookActions";
 
 const BookEditForm = ({ book }) => {
   const dispatch = useDispatch();
@@ -24,15 +24,16 @@ const BookEditForm = ({ book }) => {
     event.preventDefault();
     const { isbn, title, author } = fields;
     const bookDetails = {
-        isbn,
-        title,
-        author,
-    }
-    const imageData = new FormData();
-    if (image[0] !== "undefined") {
+      isbn,
+      title,
+      author,
+    };
+    if (image[0]) {
+      const imageData = new FormData();
       imageData.append("image", image[0]);
-    } 
-    dispatch(editBook(bookDetails, book._id, imageData));
+      dispatch(updateImage(imageData, book._id));
+    }
+    dispatch(editBook(bookDetails, book._id));
   };
   return (
     <form onSubmit={handleSubmit}>
