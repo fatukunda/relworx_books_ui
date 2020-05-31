@@ -1,11 +1,9 @@
 import React from "react";
 
-const Loader = ({ styles, spinnerColor }) => {
+const Loader = ({ spinnerSize, spinnerColor }) => {
   return (
-    <div className={styles}>
-      <div className={`spinner-border ${spinnerColor}`} role="status">
-        <span className="sr-only">Loading...</span>
-      </div>
+    <div className={`spinner-border ${spinnerSize} ${spinnerColor}`} role="status">
+      <span className="sr-only">Loading...</span>
     </div>
   );
 };

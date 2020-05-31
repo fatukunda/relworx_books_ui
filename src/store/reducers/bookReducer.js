@@ -3,6 +3,7 @@ import * as actions from "../constants/bookConstants";
 const initialState = {
   books: [],
   book: {},
+  paginationData: {},
   createLoading: false,
   editLoading: false,
   deleteLoading: false,
@@ -86,6 +87,11 @@ const bookReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case actions.SET_PAGINATION_DATA:
+      return {
+        ...state,
+        paginationData: action.payload,
       };
     default:
       return state;

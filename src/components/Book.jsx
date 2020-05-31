@@ -56,7 +56,7 @@ const Book = ({ book }) => {
               >
                 {deleteLoading ? (
                   <Loader
-                    styles="d-flex justify-content-center"
+                    spinnerSize="spinner-border-sm"
                     spinnerColor="text-warning"
                   />
                 ) : (

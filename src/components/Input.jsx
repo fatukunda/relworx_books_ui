@@ -11,7 +11,7 @@ const Input = (props) => {
       </div>
       <input
         type={props.type}
-        className="form-control"
+        className={`form-control ${props.styles}`}
         placeholder={props.placeholder}
         name={props.name}
         onChange={props.onChange}

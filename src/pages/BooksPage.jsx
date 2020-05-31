@@ -10,18 +10,23 @@ import { history } from "../App";
 import { viewUserBooks } from "../store/actions/bookActions";
 import Loader from "../components/Loader";
 import NoBooks from "../components/NoBooks";
+import SearchForm from "../components/SearchForm";
+import AppPagination from "../components/AppPagination";
 
 const BooksPage = () => {
   const [visible, setVisible] = useState(false);
   const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn);
   const books = useSelector((state) => state.bookReducer.books);
   const isLoading = useSelector((state) => state.bookReducer.isLoading);
+  const paginationData = useSelector(
+    (state) => state.bookReducer.paginationData
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     if (!isLoggedIn) {
       history.push("/");
     }
-    dispatch(viewUserBooks());
+    dispatch(viewUserBooks("/api/v1/books"));
   }, [dispatch, isLoggedIn]);
 
   const showModal = () => {
@@ -33,9 +38,12 @@ const BooksPage = () => {
   return (
     <div>
       <NavBar />
-      <div className="container-fluid main-container">
+      <div className="container main-container">
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-6">
+            <SearchForm />
+          </div>
+          <div className="col-md-6">
             {books.length > 0 ? (
               <button
                 className="btn float-right btn-success"
@@ -49,12 +57,11 @@ const BooksPage = () => {
           </div>
         </div>
       </div>
-      <div className="container mt-4">
+      <div className="container mt-4 books-container">
         {isLoading ? (
-          <Loader
-            styles="d-flex justify-content-center"
-            spinnerColor="text-primary"
-          />
+          <div className="books-container d-flex justify-content-center align-items-center">
+            <Loader spinnerColor="text-primary" />
+          </div>
         ) : (
           <div className="row mb-2">
             {books.length > 0 ? (
@@ -74,6 +81,16 @@ const BooksPage = () => {
         >
           <BookRegistrationForm />
         </AppModal>
+      </div>
+      <div className="container mt-4">
+        <div className="row">
+          {paginationData.itemCount ? (
+            <AppPagination
+              itemCount={paginationData.itemCount}
+              pages={paginationData.pages}
+            />
+          ) : null}
+        </div>
       </div>
     </div>
   );

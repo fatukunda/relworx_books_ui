@@ -54,6 +54,9 @@ $body-bg: #d9eef9;
 }
 
 // Book card styles
+.books-container {
+  min-height: 45vh;
+}
 .flip-card {
   background-color: transparent;
   height: 320px;

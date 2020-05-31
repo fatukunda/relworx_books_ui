@@ -1,6 +1,5 @@
 import axios from "axios";
 import * as actions from "../constants/bookConstants";
-import { history } from "../../App";
 
 const baseUrl = "https://relworxbooks.herokuapp.com/api/v1/books";
 
@@ -109,6 +108,13 @@ const deleteBookFailure = (error) => {
   };
 };
 
+const setPaginationData = (paginationData) => {
+  return {
+    type: actions.SET_PAGINATION_DATA,
+    payload: paginationData,
+  };
+};
+
 export const registerBook = (bookDetails) => async (dispatch) => {
   dispatch(createBookPending(true));
   try {
@@ -116,8 +122,7 @@ export const registerBook = (bookDetails) => async (dispatch) => {
     const book = response.data;
     dispatch(createBookSuccess(book));
     dispatch(createBookPending(false));
-    history.push("/books");
-    dispatch(viewUserBooks());
+    dispatch(viewUserBooks("/api/v1/books"));
   } catch (error) {
     if (error.response) {
       if (error.response.status === 401) {
@@ -147,14 +152,24 @@ export const viewSingleBook = (bookId) => async (dispatch) => {
   }
 };
 
-export const viewUserBooks = () => async (dispatch) => {
+export const viewUserBooks = (url) => async (dispatch) => {
   dispatch(fetchBooksPending(true));
   try {
-    const response = await axios.get(baseUrl);
+    const response = await axios.get(
+      `https://relworxbooks.herokuapp.com${url}`
+    );
+    console.log(response.data.data);
     const {
-      data: { books },
+      data: { books, itemCount, pages, pageCount },
     } = response.data;
     dispatch(fetchBooksSuccess(books.reverse()));
+    dispatch(
+      setPaginationData({
+        itemCount,
+        pages,
+        pageCount,
+      })
+    );
     dispatch(fetchBooksPending(false));
   } catch (error) {
     if (error.response) {
@@ -172,13 +187,14 @@ export const viewUserBooks = () => async (dispatch) => {
 export const editBook = (bookData, id, imageData) => async (dispatch) => {
   dispatch(editBookPending(true));
   try {
-    if (imageData) {
+    if (imageData.image) {
       const response = await axios.put(
         `${baseUrl}/${id}/image-upload`,
         imageData
       );
       const { data } = response;
       console.log(data);
+      return;
     }
     const response = await axios.patch(`${baseUrl}/${id}`, bookData);
     const {
@@ -186,7 +202,7 @@ export const editBook = (bookData, id, imageData) => async (dispatch) => {
     } = response.data;
     dispatch(editBookSuccess(book));
     dispatch(editBookPending(false));
-    dispatch(viewUserBooks());
+    dispatch(viewUserBooks("/api/v1/books"));
   } catch (error) {
     if (error.response) {
       dispatch(editBookFailure(error.response.data));
@@ -202,11 +218,26 @@ export const deleteBook = (bookId) => async (dispatch) => {
     const book = response.data;
     dispatch(deleteBookSuccess(book));
     dispatch(deleteBookPending(false));
-    dispatch(viewUserBooks());
+    dispatch(viewUserBooks("/api/v1/books"));
   } catch (error) {
     if (error.response) {
       dispatch(deleteBookFailure(error.response.data));
       dispatch(deleteBookPending(false));
     }
+  }
+};
+
+export const searchBooks = (books, keyword) => (dispatch) => {
+  /*eslint array-callback-return: 0 */
+  dispatch(fetchBooksPending(true));
+  const filteredBooks = books.filter((book) => {
+    return Object.keys(book).some((key) => {
+      if (typeof book[key] === "string")
+        return book[key].toLowerCase().includes(keyword.toLowerCase());
+    });
+  });
+  dispatch(fetchBooksSuccess(filteredBooks));
+  if (keyword.length > 1) {
+    dispatch(fetchBooksPending(false));
   }
 };
