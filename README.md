@@ -10,7 +10,6 @@ These instructions will get you a copy of the project up and running on your loc
 #### Prerequisites
 
  - Node.js version 10 and above.
- - MongoDB
 
 #### Installing
 
@@ -27,7 +26,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Deployment
 
- - A working app is hosted on Netlify [here]("https://relworxbooks.netlify.app/")
+ - A working app is hosted on Netlify [here](https://relworxbooks.netlify.app/)
 
 ### Built With
 
