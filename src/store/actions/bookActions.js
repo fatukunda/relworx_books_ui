@@ -158,7 +158,6 @@ export const viewUserBooks = (url) => async (dispatch) => {
     const response = await axios.get(
       `https://relworxbooks.herokuapp.com${url}`
     );
-    console.log(response.data.data);
     const {
       data: { books, itemCount, pages, pageCount },
     } = response.data;
