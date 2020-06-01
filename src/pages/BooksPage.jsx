@@ -79,7 +79,7 @@ const BooksPage = () => {
           handleClose={hideModal}
           heading="Register a New Book"
         >
-          <BookRegistrationForm />
+          <BookRegistrationForm handleClose={hideModal}/>
         </AppModal>
       </div>
       <div className="container mt-4">

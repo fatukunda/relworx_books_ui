@@ -7,7 +7,7 @@ import Alert from "./Alert";
 import { useForm } from "../libs/hooks";
 import { registerBook } from "../store/actions/bookActions";
 
-const BookRegistrationForm = () => {
+const BookRegistrationForm = ({handleClose}) => {
   const dispatch = useDispatch();
   const createLoading = useSelector((state) => state.bookReducer.createLoading);
   const error = useSelector((state) => state.bookReducer.error);
@@ -28,7 +28,7 @@ const BookRegistrationForm = () => {
     data.append("isbn", isbn);
     data.append("title", title);
     data.append("author", author);
-    dispatch(registerBook(data));
+    dispatch(registerBook(data, handleClose));
   };
   return (
     <form onSubmit={handleSubmit}>

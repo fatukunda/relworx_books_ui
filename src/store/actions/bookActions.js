@@ -115,13 +115,14 @@ const setPaginationData = (paginationData) => {
   };
 };
 
-export const registerBook = (bookDetails) => async (dispatch) => {
+export const registerBook = (bookDetails, handleClose) => async (dispatch) => {
   dispatch(createBookPending(true));
   try {
     const response = await axios.post(baseUrl, bookDetails);
     const book = response.data;
     dispatch(createBookSuccess(book));
     dispatch(createBookPending(false));
+    handleClose();
     dispatch(viewUserBooks("/api/v1/books"));
   } catch (error) {
     if (error.response) {
@@ -130,7 +131,6 @@ export const registerBook = (bookDetails) => async (dispatch) => {
         localStorage.clear();
         window.location.href = "/";
       }
-      console.log(error.response.status);
       dispatch(createBookFailure(error.response.data));
       dispatch(createBookPending(false));
     }
